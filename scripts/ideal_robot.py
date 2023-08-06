@@ -42,16 +42,17 @@ class World:
                 self.one_step(i,elems, ax)
         else:
             self.ani = anm.FuncAnimation(fig, self.one_step, fargs=(elems, ax),
-                                         frames=int(self.time_span/self.time_interval),
+                                         frames=int(self.time_span/self.time_interval)+1,
                                          interval=int(self.time_interval*1000), repeat=False)
             plt.show()
         
     def one_step(self, i, elems, ax):
         while elems: elems.pop().remove()
-        elems.append(ax.text(-4.4,4.5,"t="+str(i),fontsize=10)) 
+        time_str = "t = %.2f[s]" % (self.time_interval*i)
+        elems.append(ax.text(-4.4, 4.5, "t=" + time_str, fontsize=10)) 
         for obj in self.objects:
             obj.draw(ax, elems)
-            if hasattr(obj, "one_step"): obj.one_step(1.0)
+            if hasattr(obj, "one_step"): obj.one_step(self.time_interval)
 
 
 # In[3]:
